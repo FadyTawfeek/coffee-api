@@ -8,7 +8,7 @@ Api design:
 ![alt text](https://github.com/FadyTawfeek/coffee-api/blob/master/api_design.PNG)
 
 
-Here are some screenshots from the client:
+Here are some screenshots from the dummy browser client:
 
 
 ![alt text](https://github.com/FadyTawfeek/coffee-api/blob/master/coffee-api-users.PNG)
