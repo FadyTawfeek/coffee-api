@@ -1,0 +1,2831 @@
+FORMAT: 1A
+HOST: http://localhost:5000/
+
+# CoffeeMeta API
+
+This API is a simple coffee service for users, batches, reviews and statistics on them. The API serves JSON data extended by the [Mason hypermedia format](https://github.com/JornWildt/Mason). Custom link relations and resource profiles have been included in this API document - they are not resources.
+
+# Group Link Relations
+
+This section described custom link relations defined in this API. These are not resources. The API also uses 
+[IANA link relations](http://www.iana.org/assignments/link-relations/link-relations.xhtml) where applicable. Custom link relations are CURIEs that use the mumeta prefix. 
+
+
+## users-all
+
+Leads to the root level users collection which is a list of all users known to the API. 
+
+## add-user
+
+This is a control that is used to add a user to the associated collection resource. The control includes a JSON schema and must be accessed with POST.
+
+## batches-all
+
+Leads to the root level batches collection which is a list of all batches known to the API regardless of user.
+
+## batches-by
+
+Leads to a collection resoruce that includes all batches by the associated user.
+
+## batch-of
+
+Leads to a batch resoruce for the associated review or statistics.
+
+## add-batch
+
+This is a control that is used to add a batch to the batch collection resource. The control includes a JSON schema and must be accessed with POST.
+
+## reviews-all
+
+Leads to the root level reviews collection which is a list of all reviews known to the API regardless of the user.
+
+## reviews-by
+
+Leads to a collection resoruce that includes all reviews by the associated user.
+
+## reviews-of
+
+Leads to a collection resoruce that includes all reviews by the associated batch.
+
+## add-review
+
+This is a control that is used to add a review to the reviews collection resource. The control includes a JSON schema and must be accessed with POST.
+
+## stats-of
+
+Leads to a statistics page composed of number of reviews and average review value, for the associated group of reviews.
+
+## coffees-all
+
+Leads to the root level coffee collection which is a list of all coffees known to the API.
+
+## coffee-of
+
+Leads to a coffee resoruce for the associated batch.
+
+## add-coffee
+
+This is a control that is used to add a coffee type to the coffee collection resource. The control includes a JSON schema and must be accessed with POST.
+
+## locations-all
+
+Leads to the root level location collection which is a list of all locations known to the API.
+
+## location-of
+
+Leads to a location resoruce for the associated batch.
+
+## add-location
+
+This is a control that is used to add a location to the location collection resource. The control includes a JSON schema and must be accessed with POST.
+
+## delete
+
+Deletes the associated resource. Must be accessed with DELETE
+
+# Group Profiles
+
+This section includes resource profiles which provide semantic descriptions for the attributes of each resource, as well as the list of controls (by link relation) available from that resource.
+
+## User Profile
+
+Profile definition for all user related resources.
+
+### Link Relations
+
+This section lists all possible link relations associated with users; not all of them are necessarily present on each resource type. The following link relations from the mumeta namespace are used:
+
+ * [add-user](reference/link-relations/add-user)
+ * [users-all](reference/link-relations/users-all)
+ * [delete](reference/link-relations/delete)
+ 
+The following [IANA RFC5988](http://www.iana.org/assignments/link-relations/link-relations.xhtml) link relations are also used:
+
+ * author
+ * collection
+ * edit
+ * profile
+ * self
+ 
+### Semantic Descriptors
+
+#### Data Type User
+
+ * `id`: The id of the user in the database table. Mandatory.
+ * `student_id`: The real student id of the user. Mandatory.
+
+## Error Profile
+
+Profile definition for all errors returned by the API.
+
++ Attributes
+
+    + resource_url (string, required) - URI of the resource the error was generated from.
+    
+     
+    
+## Batch Profile
+
+Profile definition for all user related resources.
+
+### Link Relations
+
+This section lists all possible link relations associated with batches; not all of them are necessarily present on each resource type. The following link relations from the mumeta namespace are used:
+
+ * [batches-all](reference/link-relations/batches-all)
+ * [batches-by](reference/link-relations/batches-by)
+ * [batch-of](reference/link-relations/batch-of)
+ * [coffee-of](reference/link-relations/coffee-of)
+ * [location-of](reference/link-relations/location-of)
+ * [add-batch](reference/link-relations/add-batch)
+ * [delete](reference/link-relations/delete)
+ 
+The following [IANA RFC5988](http://www.iana.org/assignments/link-relations/link-relations.xhtml) link relations are also used:
+
+ * author
+ * collection
+ * edit
+ * profile
+ * self
+ 
+### Semantic Descriptors
+
+#### Data Type Batch
+
+ * `id`: The id of the batch itself. Mandatory.
+ * `amount`: The amount made of the batch. Mandatory.
+ * `date_brewed`: The date this batch was made. Mandatory.
+ * `brewer`: The id of the brewer of this batch. Mandatory.
+ * `coffee`: The id of the coffee type used in this batch. Mandatory.
+ * `location`: The id of the location where this batch was made. Mandatory.
+ 
+
+
+    
+## Review Profile
+
+Profile definition for all review related resources.
+
+### Link Relations
+
+This section lists all possible link relations associated with reviews; not all of them are necessarily present on each resource type. The following link relations from the mumeta namespace are used:
+
+ * [reviews-all](reference/link-relations/reviews-all)
+ * [reviews-by](reference/link-relations/reviews-by)
+ * [reviews-of](reference/link-relations/reviews-of)
+ * [add-review](reference/link-relations/add-review)
+ * [delete](reference/link-relations/delete)
+ 
+The following [IANA RFC5988](http://www.iana.org/assignments/link-relations/link-relations.xhtml) link relations are also used:
+
+ * author
+ * collection
+ * edit
+ * profile
+ * self
+ 
+### Semantic Descriptors
+
+#### Data Type Review
+
+ * `id`: The id of the review. Mandatory.
+ * `value`: The numeric value of the review [1-10]. Mandatory.
+ * `author_id`: The id of the user that made this review. Mandatory.
+ * `batch_id`: The id of the batch being reviewed. Mandatory.
+ 
+
+
+    
+## User statistics Profile
+
+Profile definition for user statistics related resources.
+
+### Link Relations
+
+This section lists all possible link relations associated with user statistics; not all of them are necessarily present on each resource type. The following link relations from the mumeta namespace are used:
+
+ * [stats-of](reference/link-relations/stats-of)
+ 
+The following [IANA RFC5988](http://www.iana.org/assignments/link-relations/link-relations.xhtml) link relations are also used:
+
+ * author
+ * profile
+ * self
+ 
+### Semantic Descriptors
+
+#### Data Type userstats
+ 
+ * `id`: The id of the user we have statistics for. Mandatory.
+ * `number_of_reviews`: The number of reviews in this statistics page. Mandatory.
+ * `average_value`: The average numeric value of the reviews [1-10]. Mandatory. 
+
+
+    
+## Batch statistics Profile
+
+Profile definition for batch statistics related resources.
+
+### Link Relations
+
+This section lists all possible link relations associated with batch statistics; not all of them are necessarily present on each resource type. The following link relations from the mumeta namespace are used:
+
+ * [stats-of](reference/link-relations/stats-of)
+ * [batch-of](reference/link-relations/batch-of)
+ 
+The following [IANA RFC5988](http://www.iana.org/assignments/link-relations/link-relations.xhtml) link relations are also used:
+
+ * profile
+ * self
+ 
+### Semantic Descriptors
+
+#### Data Type batchstats
+ 
+ * `id`: The id of the batch we have statistics for. Mandatory.
+ * `number_of_reviews`: The number of reviews in this statistics page. Mandatory.
+ * `average_value`: The average numeric value of the reviews [1-10]. Mandatory. 
+
+
+
+
+## Coffee Profile
+
+Profile definition for all coffee related resources.
+
+### Link Relations
+
+This section lists all possible link relations associated with coffee; not all of them are necessarily present on each resource type. The following link relations from the mumeta namespace are used:
+
+ * [coffees-all](reference/link-relations/coffee-all)
+ * [add-coffee](reference/link-relations/add-coffee)
+ 
+The following [IANA RFC5988](http://www.iana.org/assignments/link-relations/link-relations.xhtml) link relations are also used:
+
+ * collection
+ * edit
+ * profile
+ * self
+ 
+### Semantic Descriptors
+
+#### Data Type Coffee
+
+ * `id`: The id of the coffee. Mandatory.
+ * `name`: The name of the coffee type. Mandatory.
+ 
+
+
+
+## Location Profile
+
+Profile definition for all location related resources.
+
+### Link Relations
+
+This section lists all possible link relations associated with locations; not all of them are necessarily present on each resource type. The following link relations from the mumeta namespace are used:
+
+ * [locations-all](reference/link-relations/locations-all)
+ * [add-location](reference/link-relations/add-location)
+ 
+The following [IANA RFC5988](http://www.iana.org/assignments/link-relations/link-relations.xhtml) link relations are also used:
+
+ * collection
+ * edit
+ * profile
+ * self
+ 
+### Semantic Descriptors
+
+#### Data Type Location
+
+ * `id`: The id of the location. Mandatory.
+ * `name`: The name of the location. Mandatory.
+ 
+
+
+# Group Entry
+
+This group contains the entry point of the API
+
+## Entry Point [/api/]
+
+### Get entry point [GET]
+
+Get the API entry point
+
++ Request
+
+    + Headers
+    
+            Accept: application/vnd.mason+json
+            
++ Response 200 (application/vnd.mason+json)
+
+    + Body
+    
+            {
+                "@namespaces": {
+                    "mumeta": {
+                        "name": "/coffeemeta/link-relations#"
+                    }
+                },
+                "@controls": {
+                    "mumeta:users-all": {
+                        "href": "/api/users/"
+                    },
+                    "mumeta:batches-all": {
+                        "href": "/api/batches/"
+                    },
+                    "mumeta:reviews-all": {
+                        "href": "/api/reviews/"
+                    },
+                    "mumeta:coffees-all": {
+                        "href": "/api/coffees/"
+                    },
+                    "mumeta:locations-all": {
+                        "href": "/api/locations/"
+                    }
+                }
+            }
+
+# Group Users
+
+All of these resources use the [User Profile](reference/profiles/user-profile). In error scenarios [Error Profile](reference/profiles/error-profile) is used.
+
+## Users Collection [/api/users/]
+
+This is a user collection
+
+### List users [GET]
+
+Get a list of users.
+
++ Relation: users-all
++ Request
+
+    + Headers
+    
+            Accept: application/vnd.mason+json
+    
++ Response 200 (application/vnd.mason+json)
+
+    + Body
+    
+            {
+                "@namespaces": {
+                    "mumeta": {
+                        "name": "/coffeemeta/link-relations#"
+                    }
+                }, 
+                "@controls": {
+                    "self": {
+                        "href": "/api/users/"
+                    },                    
+                    "mumeta:batches-all": {
+                        "href": "/api/batches/",
+                        "title": "All batches"
+                    },
+                    "mumeta:reviews-all": {
+                        "href": "/api/reviews/",
+                        "title": "All reviews"
+                    },
+                    "mumeta:add-user": {
+                        "href": "/api/users/",
+                        "title": "Add a new user",
+                        "encoding": "json",
+                        "method": "POST",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "id": {
+                                    "description": "id",
+                                    "type": "integer"
+                                },
+                                "student_id":{
+                                    "description": "id of student",
+                                    "type": "integer"                                    
+                                }                          
+                            },
+                            "required": ["id", "student_id"]
+                        }
+                    }
+                },
+                "items": [
+                    {
+                        "id": 1,
+                        "student_id": 2646404,
+                        "@controls": {
+                            "self": {
+                                "href": "/api/users/1/"
+                            },
+                            "profile": {
+                                "href": "/profiles/user/"
+                            }
+                        }
+                    },
+                    {
+                        "id": 2,
+                        "student_id": 2936745,
+                        "@controls": {
+                            "self": {
+                                "href": "/api/users/2/"
+                            },
+                            "profile": {
+                                "href": "/profiles/user/"
+                            }
+                        }
+                    }
+                ]
+            }
+
+
+### Add user [POST]
+
+Adds a new user. The user representation must be valid against the user schema.
+
++ Relation: add-user
++ Request (application/json)
+
+    + Headers
+
+            Accept: application/vnd.mason+json
+        
+    + Body
+    
+            {
+                "id": 1,
+                "student_id": 2646404
+            }
+
++ Response 201
+
+    + Headers
+    
+            Location: /api/users/1/
+
++ Response 400 (application/vnd.mason+json)
+
+    The client is trying to send a JSON document that doesn't validate against the schema.
+
+    + Body
+    
+            {
+                "resource_url": "/api/users/",
+                "@error": {
+                    "@message": "Invalid JSON document"
+                },
+                "@controls": {
+                    "profile": {
+                        "href": "/profiles/error/"
+                    }
+                }
+            }
+
+
++ Response 409 (application/vnd.mason+json)
+
+    The client is trying to add a user with an id that's already present.
+
+    + Body
+    
+            {
+                "resource_url": "/api/users/",
+                "@error": {
+                    "@message": "Already exists",
+                    "@messages": [
+                        "User '1' already exist"
+                    ]
+                },
+                "@controls": {
+                    "profile": {
+                        "href": "/profiles/error/"
+                    }
+                }
+            }
+            
+
++ Response 415 (application/vnd.mason+json)
+
+    The client did not use the proper content type, or the request body was not valid JSON.
+
+    + Body
+        
+            {
+                "resource_url": "/api/users/",
+                "@error": {
+                    "@message": "Unsupported media type",
+                    "@messages": [
+                        "Use JSON"
+                    ]
+                },
+                "@controls": {
+                    "profile": {
+                        "href": "/profiles/error-profile/"
+                    }
+                }
+            }
+            
+            
+  
+## User [/api/users/{user}/]
+
+This resource represents a user, as identified by the user's id.
+
++ Parameters
+
+    + user: 1 (integer) - user's id (id)
+
+
+### User information [GET]
+
+Get the user representation.
+
++ Relation: self
++ Request
+
+    + Headers
+    
+            Accept: application/vnd.mason+json
+        
++ Response 200 (application/vnd.mason+json)
+
+    + Body
+    
+            {
+                "@namespaces": {
+                    "mumeta": {
+                        "name": "/coffeemeta/link-relations#"
+                    }
+                },
+                "name": 1,
+                "student_id": 2646404,
+                "@controls": {
+                    "mumeta:batches-by": {
+                        "href": "/api/users/1/batches/"
+                    },
+                    "mumeta:stats-of": {
+                        "href": "/api/users/1/reviews/stats/"
+                    },
+                    "mumeta:reviews-by": {
+                        "href": "/api/users/1/reviews/"
+                    },
+                    "self": {
+                        "href": "/api/users/1/"
+                    },
+                    "profile": {
+                        "href": "/profiles/user/"
+                    },
+                    "collection": {
+                        "href": "/api/users/"
+                    },                 
+                    "edit": {
+                        "href": "/api/users/scandal/",
+                        "title": "Edit this user",
+                        "encoding": "json",
+                        "method": "PUT",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "id": {
+                                    "description": "id",
+                                    "type": "integer"
+                                },
+                                "student_id":{
+                                    "description": "id of student",
+                                    "type": "integer"                                    
+                                }
+                            },
+                            "required": ["id", "student_id"]
+                        }                 
+                    },
+                    "mumeta:delete": {
+                        "href": "/api/users/1/",
+                        "title": "Delete this user",
+                        "method": "DELETE"
+                    }
+                }
+            }
+
++ Response 404 (application/vnd.mason+json)
+
+    The client is trying to access a user that doesn't exist.
+
+    + Body
+    
+            {
+                "resource_url": "/api/users/7000/",
+                "@error": {
+                    "@message": "User not found",
+                },
+                "@controls": {
+                    "profile": {
+                        "href": "/profiles/error/"
+                    }
+                }
+            }
+            
+### Edit user information [PUT]
+
+Replace the user's representation with a new one. Missing optinal fields will be set to null. Must validate against the user schema. 
+
++ Relation: edit
++ Request (application/json)
+
+    + Headers
+        
+            Accept: application/vnd.mason+json
+        
+    + Body
+    
+            {
+                "id": 1,
+                "student_id": 2646404
+            }
+        
++ Response 204
+
+
++ Response 400 (application/vnd.mason+json)
+
+    The client is trying to send a JSON document that doesn't validate against the schema.
+
+    + Body
+    
+            {
+                "resource_url": "/api/users/1/",
+                "@error": {
+                    "@message": "Invalid format",
+                    "@messages": [null]
+                },
+                "@controls": {
+                    "profile": {
+                        "href": "/profiles/error/"
+                    }
+                }
+            }
+
++ Response 404 (application/vnd.mason+json)
+
+    The client is trying to edit a user that doesn't exist. 
+
+    + Body
+    
+            {
+                "resource_url": "/api/users/7000/",
+                "@error": {
+                    "@message": "User not found",
+                    "@messages": [null]
+                },
+                "@controls": {
+                    "profile": {
+                        "href": "/profiles/error/"
+                    }
+                }
+            }
+            
+        
++ Response 415 (application/vnd.mason+json)
+
+    The client sent a request with the wrong content type or the request body was not valid JSON.
+
+    + Body
+        
+            {
+                "resource_url": "/api/users/1/",
+                "@error": {
+                    "@message": "Unsupported media type",
+                    "@messages": [
+                        "Use JSON"
+                    ]
+                },
+                "@controls": {
+                    "profile": {
+                        "href": "/profiles/error-profile/"
+                    }
+                }
+            }
+
+### Delete user [DELETE]
+
+Deletes the user.
+
++ Relation: delete
++ Request
+
+    + Headers
+        
+            Accept: application/vnd.mason+json
+        
++ Response 204
+
++ Response 404 (application/vnd.mason+json)
+
+    The client is trying to delete a user that doesn't exist. 
+
+    + Body
+    
+            {
+                "resource_url": "/api/users/7000/",
+                "@error": {
+                    "@message": "User not found",
+                    "@messages": [null]
+                },
+                "@controls": {
+                    "profile": {
+                        "href": "/profiles/error/"
+                    }
+                }
+            }
+
+
+
+
+
+
+
+
+
+
+# Group Batches
+
+All of these resources use the [Batch Profile](reference/profiles/batch-profile). In error scenarios [Error Profile](reference/profiles/error-profile) is used.
+
+## Batch Collection [/api/batches/]
+
+A list of all batches known to the API.
+
+
+### List all batches [GET]
+
+Get a list of all batches known to the API.
+
++ Relation: batches-all
++ Request
+
+    + Headers
+    
+            Accept: application/vnd.mason+json
+
++ Response 200 (application/vnd.mason+json)
+    
+    + Body
+
+            {
+                "@namespaces": {
+                    "mumeta": {
+                        "name": "/coffeemeta/link-relations#"
+                    }
+                },
+                "@controls": {
+                    "self": {
+                        "href": "/api/batches/"
+                    },
+                    "mumeta:users-all": {
+                        "href": "/api/users/",
+                        "title": "All users"
+                    },
+                    "mumeta:batches-by": {
+                        "href": "/api/users/{user}/batches/",
+                        "title": "batches by a user"
+                    }
+                },
+                "items": [
+                    {
+                        "id": 1,
+                        "amount": 10,
+                        "date_brewed": "20-4-2020",
+                        "brewer": 1,
+                        "coffee": 1,
+                        "location": 1,
+                        "@controls": {
+                            "self": {
+                                "href": "/api/batches/1/"
+                            }, 
+                            "profile": {
+                                "href": "/profiles/batch/"
+                            }
+                        },
+                    }, 
+                    {
+                        "id": 2,
+                        "amount": 20,
+                        "date_brewed": "20-5-2020",
+                        "brewer": 2,
+                        "coffee": 2,
+                        "location": 2,
+                        "@controls": {
+                            "self": {
+                                "href": "/api/batches/2/"
+                            }, 
+                            "profile": {
+                                "href": "/profiles/batch/"
+                            }
+                        },
+                    }
+                ]
+            }
+        
+## Batches by user [/api/users/{user}/batches/]
+
+This is batches collection by a given user using the user's unique id.
+
++ Parameters
+
+    + user: 1 (integer) - user's unique id (id)
+
+### List batches by user [GET]
+
+Get a list of batches by a user.
+
++ Relation: batches-by
++ Request
+
+    + Headers
+    
+            Accept: application/vnd.mason+json
+    
++ Response 200 (application/vnd.mason+json)
+
+    + Body
+    
+            {
+                "@namespaces": {
+                    "mumeta": {
+                        "name": "/coffeemeta/link-relations#"
+                    }
+                }, 
+                "@controls": {
+                    "self": {
+                        "href": "/api/users/1/batches/"
+                    },
+                    "mumeta:users-all": {
+                        "href": "/api/users/",
+                        "title": "All users"
+                    },                    
+                    "mumeta:batches-all": {
+                        "href": "/api/batches/",
+                        "title": "All batches"
+                    },                    
+                    "author": {
+                        "href": "/api/users/1/"
+                    },
+                    "mumeta:add-batch": {
+                        "href": "/api/batches/",
+                        "title": "Add a new batch for this user",
+                        "encoding": "json",
+                        "method": "POST",
+                        "schema": {
+                            "type": "object",
+                            "properties": {                    
+                                "id": {
+                                    "description": "id",
+                                    "type": "integer"
+                                },
+                                "amount": {
+                                    "description": "amount of batch",
+                                    "type": "integer"
+                                },
+                                "date_brewed": {
+                                    "description": "The date the batch was brewed",
+                                    "type": "datetime"
+                                },
+                                "brewer": {
+                                    "description": "id of brewer of the batch",
+                                    "type": "integer"
+                                },
+                                "coffee": {
+                                    "description": "The id of coffee user in the batch",
+                                    "type": "integer"
+                                },
+                                "location": {
+                                    "description": "The id of the location where the batch was brewed",
+                                    "type": "integer"
+                                }
+                            },
+                            "required": ["id", "amount", "date_brewed", "brewer", "coffee", "location"]
+                        }
+                    }
+                },
+                "items": [
+                    {
+                        "id": 1,
+                        "amount": 10,
+                        "date_brewed": "20-4-2020",
+                        "brewer": 1,
+                        "coffee": 1,
+                        "location": 1,
+                        "@controls": {
+                            "self": {
+                                "href": "/api/batches/1/"
+                            },
+                            "profile": {
+                                "href": "/profiles/batch/"
+                            }
+                        }
+                    },
+                    {
+                        "id": 2,
+                        "amount": 20,
+                        "date_brewed": "20-5-2020",
+                        "brewer": 1,
+                        "coffee": 2,
+                        "location": 2,
+                        "@controls": {
+                            "self": {
+                                "href": "/api/batches/2/"
+                            },
+                            "profile": {
+                                "href": "/profiles/batch/"
+                            }
+                        }
+                    }
+                ]
+            }
+
++ Response 404 (application/vnd.mason+json)
+
+    The client is trying to retrieve list of batches for a user that doesn't exist.
+
+    + Body
+    
+            
+            {
+                "resource_url": "/api/users/7000/batches/",
+                "@error": {
+                    "@message": "User not found",
+                    "@messages": [null]
+                },
+                "@controls": {
+                    "profile": {
+                        "href": "/profiles/error/"
+                    }
+                }
+            }
+
+### Add batch for user [POST]
+
+Adds a new batch for the user. The batch representation must be valid against the batch schema.
+
++ Relation: add-batch
++ Request (application/json)
+
+    + Headers
+
+            Accept: application/vnd.mason+json
+        
+    + Body
+    
+            {
+                "id": 1,
+                "amount": 10,
+                "date_brewed": "20-4-2020",
+                "brewer": 1,
+                "coffee": 1,
+                "location": 1
+            }
+
++ Response 201
+
+    + Headers
+    
+            Location: /api/batches/1/
+
++ Response 400 (application/vnd.mason+json)
+
+    The client is trying to send a JSON document that doesn't validate against the schema.
+
+    + Body
+    
+            {
+                "resource_url": "/api/batches/",
+                "@error": {
+                    "@message": "Invalid JSON document"
+                },
+                "@controls": {
+                    "profile": {
+                        "href": "/profiles/error/"
+                    }
+                }
+            }
+
++ Response 404 (application/vnd.mason+json)
+
+    The client is trying to add a batch for a user that doesn't exist.
+
+    + Body
+    
+            {
+                "resource_url": "/api/users/7000/batches/",
+                "@error": {
+                    "@message": "User not found",
+                    "@messages": [null]
+                },
+                "@controls": {
+                    "profile": {
+                        "href": "/profiles/error/"
+                    }
+                }
+            }
+
++ Response 409 (application/vnd.mason+json)
+
+    The client is trying to add a batch with an id that's already used by another batch.
+
+    + Body
+    
+            {
+                "resource_url": "/api/batches/",
+                "@error": {
+                    "@message": "Already exists",
+                    "@messages": [
+                        "There is already a batch with id '1'"
+                    ]
+                },
+                "@controls": {
+                    "profile": {
+                        "href": "/profiles/error/"
+                    }
+                }
+            }
+            
+
++ Response 415 (application/vnd.mason+json)
+
+    The client did not use the proper content type, or the request body was not valid JSON.
+
+    + Body
+        
+            {
+                "resource_url": "/api/batches/",
+                "@error": {
+                    "@message": "Unsupported media type",
+                    "@messages": [
+                        "Use JSON"
+                    ]
+                },
+                "@controls": {
+                    "profile": {
+                        "href": "/profiles/error-profile/"
+                    }
+                }
+            }
+        
+## Batch [/api/batches/{batch}/]
+
+This resource represents a batch by a user.
+
++ Parameters
+
+    + batch: 1 (integer) - batch's id
+
+
+### Batch information [GET]
+
+Get the Batch representation.
+
++ Relation: self
++ Request
+
+    + Headers
+    
+            Accept: application/vnd.mason+json
+        
++ Response 200 (application/vnd.mason+json)
+
+    + Body
+    
+            {
+                "@namespaces": {
+                    "mumeta": {
+                        "name": "/coffeemeta/link-relations#"
+                    }
+                },
+                "id": 1,
+                "amount": 10,
+                "date_brewed": "20-4-2020",
+                "brewer": 1,
+                "coffee": 1,
+                "location": 1,
+                "@controls": {
+                    "author": {
+                        "href": "/api/users/1/"
+                    },
+                    "mumeta:batches-by": {
+                        "href": "/api/users/1/batches/"
+                    },
+                    "mumeta:reviews-of": {
+                        "href": "/api/batches/1/reviews/"
+                    },
+                    "mumeta:stats-of": {
+                        "href": "/api/batches/1/reviews/stats/"
+                    },
+                    "mumeta:coffee-of": {
+                        "href": "/api/coffees/1/"
+                    },
+                    "mumeta:location-of": {
+                        "href": "/api/locations/1/"
+                    },
+                    "self": {
+                        "href": "/api/bathces/1/"
+                    },
+                    "profile": {
+                        "href": "/profiles/batch/"
+                    },
+                    "collection": {
+                        "href": "/api/batches/"
+                    },
+                    "edit": {
+                        "href": "/api/batches/1/",
+                        "title": "Edit this batch",
+                        "encoding": "json",
+                        "method": "PUT",
+                        "schema": {
+                            "type": "object",
+                            "properties": {                    
+                                "id": {
+                                    "description": "id",
+                                    "type": "integer"
+                                },
+                                "amount": {
+                                    "description": "amount of batch",
+                                    "type": "integer"
+                                },
+                                "date_brewed": {
+                                    "description": "The date the batch was brewed",
+                                    "type": "datetime"
+                                },
+                                "brewer": {
+                                    "description": "id of brewer of the batch",
+                                    "type": "integer"
+                                },
+                                "coffee": {
+                                    "description": "The id of coffee user in the batch",
+                                    "type": "integer"
+                                },
+                                "location": {
+                                    "description": "The id of the location where the batch was brewed",
+                                    "type": "integer"
+                                }
+                            },
+                            "required": ["id", "amount", "date_brewed", "brewer", "coffee", "location"]
+                        }
+                    },
+                    "mumeta:delete": {
+                        "href": "/api/batches/1/",
+                        "title": "Delete this batch",
+                        "method": "DELETE"
+                    }
+                }
+            }
+
++ Response 404 (application/vnd.mason+json)
+
+    The client is trying to access a batch that doesn't exist.
+
+    + Body
+    
+            {
+                "resource_url": "/api/batches/8000/",
+                "@error": {
+                    "@message": "Batch not found",
+                    "@messages": [null]
+                },
+                "@controls": {
+                    "profile": {
+                        "href": "/profiles/error/"
+                    }
+                }
+            }
+
+
+
+            
+### Edit batch information [PUT]
+
+Replace the batch's representation with a new one. Missing optinal fields will be set to null. Must validate against the batch schema. 
+
++ Relation: edit
++ Request (application/json)
+
+    + Headers
+        
+            Accept: application/vnd.mason+json
+        
+    + Body
+    
+            {
+                "id": 1,
+                "amount": 10,
+                "date_brewed": "20-4-2020",
+                "brewer": 1,
+                "coffee": 1,
+                "location": 1
+            }
+        
++ Response 204
+
+
++ Response 400 (application/vnd.mason+json)
+
+    The client is trying to send a JSON document that doesn't validate against the schema.
+
+    + Body
+    
+            {
+                "resource_url": "/api/batches/1/",
+                "@error": {
+                    "@message": "Invalid format",
+                    "@messages": [null]
+                },
+                "@controls": {
+                    "profile": {
+                        "href": "/profiles/error/"
+                    }
+                }
+            }
+
++ Response 404 (application/vnd.mason+json)
+
+    The client is trying to edit a batch that doesn't exist. 
+
+    + Body
+    
+            {
+                "resource_url": "/api/batches/8000/",
+                "@error": {
+                    "@message": "Batch not found",
+                    "@messages": [null]
+                },
+                "@controls": {
+                    "profile": {
+                        "href": "/profiles/error/"
+                    }
+                }
+            }
+            
+        
++ Response 415 (application/vnd.mason+json)
+
+    The client sent a request with the wrong content type or the request body was not valid JSON.
+
+    + Body
+        
+            {
+                "resource_url": "/api/batches/1/",
+                "@error": {
+                    "@message": "Unsupported media type",
+                    "@messages": [
+                        "Use JSON"
+                    ]
+                },
+                "@controls": {
+                    "profile": {
+                        "href": "/profiles/error-profile/"
+                    }
+                }
+            }
+
+### Delete batch [DELETE]
+
+Deletes the batch.
+
++ Relation: delete
++ Request
+
+    + Headers
+        
+            Accept: application/vnd.mason+json
+        
++ Response 204
+
++ Response 404 (application/vnd.mason+json)
+
+    The client is trying to delete a batch that doesn't exist. 
+
+    + Body
+    
+            {
+                "resource_url": "/api/batches/8000/",
+                "@error": {
+                    "@message": "Batch not found",
+                    "@messages": [null]
+                },
+                "@controls": {
+                    "profile": {
+                        "href": "/profiles/error/"
+                    }
+                }
+            }
+
+
+
+
+
+
+
+
+
+
+# Group Reviews
+
+All of these resources use the [Review Profile](reference/profiles/review-profile). In error scenarios [Error Profile](reference/profiles/error-profile) is used.
+
+## Reviews Collection [/api/reviews/]
+
+A list of all reviews known to the API.
+
+
+### List all reviews [GET]
+
+Get a list of all reviews known to the API.
+
++ Relation: reviews-all
++ Request
+
+    + Headers
+    
+            Accept: application/vnd.mason+json
+
++ Response 200 (application/vnd.mason+json)
+    
+    + Body
+
+            {
+                "@namespaces": {
+                    "mumeta": {
+                        "name": "/coffeemeta/link-relations#"
+                    }
+                },
+                "@controls": {
+                    "self": {
+                        "href": "/api/reviews/"
+                    },
+                    "mumeta:users-all": {
+                        "href": "/api/users/",
+                        "title": "All users"
+                    },
+                    "mumeta:reviews-by": {
+                        "href": "/api/users/{user}/reviews/",
+                        "title": "Reviews by a user"
+                    }
+                },
+                "items": [
+                    {
+                        "id": 1,
+                        "value": 9,
+                        "author_id": "2646404",
+                        "batch_id": 1,
+                        "@controls": {
+                            "self": {
+                                "href": "/api/reviews/1/"
+                            }, 
+                            "profile": {
+                                "href": "/profiles/review/"
+                            }
+                        },
+                    }, 
+                    {
+                        "id": 2,
+                        "value": 8,
+                        "author_id": "2857302",
+                        "batch_id": 2,
+                        "@controls": {
+                            "self": {
+                                "href": "/api/reviews/2/"
+                            }, 
+                            "profile": {
+                                "href": "/profiles/review/"
+                            }
+                        },
+                    }
+                ]
+            }
+        
+        
+        
+        
+## Reviews by user [/api/users/{user}/reviews/]
+
+This is reviews collection by a given user using the user's unique id.
+
++ Parameters
+
+    + user: 1 (integer) - user's unique id (id)
+
+### List reviews by user [GET]
+
+Get a list of reviews by a user.
+
++ Relation: reviews-by
++ Request
+
+    + Headers
+    
+            Accept: application/vnd.mason+json
+    
++ Response 200 (application/vnd.mason+json)
+
+    + Body
+    
+            {
+                "@namespaces": {
+                    "mumeta": {
+                        "name": "/coffeemeta/link-relations#"
+                    }
+                }, 
+                "@controls": {
+                    "self": {
+                        "href": "/api/users/1/reviews/"
+                    },
+                    "mumeta:users-all": {
+                        "href": "/api/users/",
+                        "title": "All users"
+                    },                    
+                    "mumeta:reviews-all": {
+                        "href": "/api/reviews/",
+                        "title": "All reviews"
+                    },
+                    "mumeta:stats-of": {
+                        "href": "/api/users/1/reviews/stats/"
+                    },
+                    "author": {
+                        "href": "/api/users/1/"
+                    }
+                },
+                "items": [
+                    {
+                        "id": 1,
+                        "value": 9,
+                        "author_id": "2646404",
+                        "batch_id": 1,
+                        "@controls": {
+                            "self": {
+                                "href": "/api/reviews/1/"
+                            },
+                            "profile": {
+                                "href": "/profiles/review/"
+                            }
+                        }
+                    },
+                    {
+                       "id": 2,
+                        "value": 8,
+                        "author_id": "2859284",
+                        "batch_id": 2,
+                        "@controls": {
+                            "self": {
+                                "href": "/api/reviews/2/"
+                            },
+                            "profile": {
+                                "href": "/profiles/review/"
+                            }
+                        }
+                    }
+                ]
+            }
+
++ Response 404 (application/vnd.mason+json)
+
+    The client is trying to retrieve list of reviews for a batch that doesn't exist.
+
+    + Body
+    
+            
+            {
+                "resource_url": "/api/batches/8000/reviews/",
+                "@error": {
+                    "@message": "Batch not found",
+                    "@messages": [null]
+                },
+                "@controls": {
+                    "profile": {
+                        "href": "/profiles/error/"
+                    }
+                }
+            }
+            
+            
+            
+
+
+        
+## Reviews of batch [/api/batches/{batch}/reviews]
+
+This resource represents reviews for a given batch made by a user, as identified by the batch's unique id.
+
++ Parameters
+
+    + batch: 1 (integer) - batch's id
+
+
+### reviews of batch information [GET]
+
+Get the reviews of a batch.
+
++ Relation: self
++ Request
+
+    + Headers
+    
+            Accept: application/vnd.mason+json
+        
++ Response 200 (application/vnd.mason+json)
+
+    + Body
+    
+            {
+                "@namespaces": {
+                    "mumeta": {
+                        "name": "/coffeemeta/link-relations#"
+                    }
+                },
+                "id": 1,
+                "value": 9,
+                "author_id": "2646404",
+                "batch_id": 1,
+                "@controls": {
+                    "mumeta:batch-of": {
+                        "href": "/api/batches/1/"
+                    },
+                    "mumeta:stats-of": {
+                        "href": "/api/batches/1/reviews/stats/"
+                    },
+                    "self": {
+                        "href": "/api/batches/1/reviews/"
+                    },
+                    "profile": {
+                        "href": "/profiles/review/"
+                    },
+                    "collection": {
+                        "href": "/api/reviews/"
+                    },
+                    "mumeta:add-review": {
+                        "href": "/api/reviews/",
+                        "title": "Add a new review for this batch",
+                        "encoding": "json",
+                        "method": "POST",
+                        "schema": {
+                            "type": "object",
+                            "properties": {                    
+                                "id": {
+                                    "description": "id",
+                                    "type": "integer"
+                                },
+                                "value": {
+                                    "description": "value of review 1-10",
+                                    "type": "integer"
+                                },
+                                "author_id": {
+                                    "description": "The id of the review author",
+                                    "type": "integer"
+                                },
+                                "batch_id": {
+                                    "description": "id of the batch being reviewed",
+                                    "type": "integer"
+                                }
+                            },
+                            "required": ["id", "value", "author_id", "batch_id"]
+                        }
+                    }
+                },
+                "items": [
+                    {
+                        "id": 1,
+                        "value": 9,
+                        "author_id": "2646404",
+                        "batch_id": 1,
+                        "@controls": {
+                            "self": {
+                                "href": "/api/reviews/1/"
+                            },
+                            "profile": {
+                                "href": "/profiles/review/"
+                            }
+                        }
+                    },
+                    {
+                        "id": 2,
+                        "value": 8,
+                        "author_id": "2829476",
+                        "batch_id": 1,
+                        "@controls": {
+                            "self": {
+                                "href": "/api/reviews/2/"
+                            },
+                            "profile": {
+                                "href": "/profiles/review/"
+                            }
+                        }
+                    }  
+                ]
+            }
+
++ Response 404 (application/vnd.mason+json)
+
+    The client is trying to access reviews for a batch that doesn't exist.
+
+    + Body
+    
+            {
+                "resource_url": "/api/batches/8000/reviews",
+                "@error": {
+                    "@message": "Batch not found",
+                    "@messages": [null]
+                },
+                "@controls": {
+                    "profile": {
+                        "href": "/profiles/error/"
+                    }
+                }
+            }
+            
+
+
+### Add review for batch [POST]
+
+Adds a new review for the batch. The review representation must be valid against the review schema.
+
++ Relation: add-review
++ Request (application/json)
+
+    + Headers
+
+            Accept: application/vnd.mason+json
+        
+    + Body
+    
+            {
+                "id": 1,
+                "value": 9,
+                "author_id": "2646404",
+                "batch_id": 1,
+            }
+
++ Response 201
+
+    + Headers
+    
+            Location: /api/reviews/1/
+
++ Response 400 (application/vnd.mason+json)
+
+    The client is trying to send a JSON document that doesn't validate against the schema.
+
+    + Body
+    
+            {
+                "resource_url": "/api/reviews/",
+                "@error": {
+                    "@message": "Invalid JSON document"
+                },
+                "@controls": {
+                    "profile": {
+                        "href": "/profiles/error/"
+                    }
+                }
+            }
+
++ Response 404 (application/vnd.mason+json)
+
+    The client is trying to add a review for a batch that doesn't exist.
+
+    + Body
+    
+            {
+                "resource_url": "/api/batches/8000/reviews/",
+                "@error": {
+                    "@message": "Batch not found",
+                    "@messages": [null]
+                },
+                "@controls": {
+                    "profile": {
+                        "href": "/profiles/error/"
+                    }
+                }
+            }
+
++ Response 409 (application/vnd.mason+json)
+
+    The client is trying to add a review with an id that's already used by another review.
+
+    + Body
+    
+            {
+                "resource_url": "/api/reviews/",
+                "@error": {
+                    "@message": "Already exists",
+                    "@messages": [
+                        "There is already a review with id '1'"
+                    ]
+                },
+                "@controls": {
+                    "profile": {
+                        "href": "/profiles/error/"
+                    }
+                }
+            }
+            
+
++ Response 415 (application/vnd.mason+json)
+
+    The client did not use the proper content type, or the request body was not valid JSON.
+
+    + Body
+        
+            {
+                "resource_url": "/api/reviews/",
+                "@error": {
+                    "@message": "Unsupported media type",
+                    "@messages": [
+                        "Use JSON"
+                    ]
+                },
+                "@controls": {
+                    "profile": {
+                        "href": "/profiles/error-profile/"
+                    }
+                }
+            }
+        
+
+
+
+
+
+
+
+
+
+## review [/api/reviews/{review}]
+
+This resource represents a review for a batch by a user.
+
++ Parameters
+
+    + review: 1 (integer) - review's unique id (id)
+
+
+### review information [GET]
+
+Get the review representation.
+
++ Relation: self
++ Request
+
+    + Headers
+    
+            Accept: application/vnd.mason+json
+        
++ Response 200 (application/vnd.mason+json)
+
+    + Body
+    
+            {
+                "@namespaces": {
+                    "mumeta": {
+                        "name": "/coffeemeta/link-relations#"
+                    }
+                },
+                "id": 1,
+                "value": 9,
+                "author_id": "2646404",
+                "batch_id": 1,
+                "@controls": {
+                    "author": {
+                        "href": "/api/users/1/"
+                    },
+                    "mumeta:reviews-of": {
+                        "href": "/api/batches/1/reviews/"
+                    },
+                    "mumeta:reviews-by": {
+                        "href": "/api/users/1/reviews/"
+                    },
+                    "mumeta:batch-of": {
+                        "href": "/api/batches/1/"
+                    },
+                    "self": {
+                        "href": "/api/reviews/1/"
+                    },
+                    "profile": {
+                        "href": "/profiles/review/"
+                    },
+                    "collection": {
+                        "href": "/api/reviews/"
+                    },
+                    "edit": {
+                        "href": "/api/reviews/1/",
+                        "title": "Edit this review",
+                        "encoding": "json",
+                        "method": "PUT",
+                        "schema": {
+                            "type": "object",
+                            "properties": {                    
+                                "id": {
+                                    "description": "id",
+                                    "type": "integer"
+                                },
+                                "value": {
+                                    "description": "value of review 1-10",
+                                    "type": "integer"
+                                },
+                                "author_id": {
+                                    "description": "The id of the review author",
+                                    "type": "integer"
+                                },
+                                "batch_id": {
+                                    "description": "id of the batch being reviewed",
+                                    "type": "integer"
+                                }
+                            },
+                            "required": ["id", "value", "author_id", "batch_id"]
+                        }
+                    },
+                    "mumeta:delete": {
+                        "href": "/api/reviews/1",
+                        "title": "Delete this review",
+                        "method": "DELETE"
+                    }
+                }
+            }
+
++ Response 404 (application/vnd.mason+json)
+
+    The client is trying to access a review for a batch that doesn't exist or for a user that does not exist.
+
+    + Body
+    
+            {
+                "resource_url": "/api/batches/8000/reviews/1/",
+                "@error": {
+                    "@message": "Batch or user not found",
+                    "@messages": [null]
+                },
+                "@controls": {
+                    "profile": {
+                        "href": "/profiles/error/"
+                    }
+                }
+            }
+
+
+
+
+            
+### Edit review information [PUT]
+
+Replace the review's representation with a new one. Missing optinal fields will be set to null. Must validate against the review schema. 
+
++ Relation: edit
++ Request (application/json)
+
+    + Headers
+        
+            Accept: application/vnd.mason+json
+        
+    + Body
+    
+            {
+                "id": 1,
+                "value": 9,
+                "author_id": "2646404",
+                "batch_id": 1
+            }
+        
++ Response 204
+
+
++ Response 400 (application/vnd.mason+json)
+
+    The client is trying to send a JSON document that doesn't validate against the schema.
+
+    + Body
+    
+            {
+                "resource_url": "/api/reviews/1/",
+                "@error": {
+                    "@message": "Invalid format",
+                    "@messages": [null]
+                },
+                "@controls": {
+                    "profile": {
+                        "href": "/profiles/error/"
+                    }
+                }
+            }
+
++ Response 404 (application/vnd.mason+json)
+
+    The client is trying to edit a review that doesn't exist. 
+
+    + Body
+    
+            {
+                "resource_url": "/api/reviews/9000/",
+                "@error": {
+                    "@message": "Review not found",
+                    "@messages": [null]
+                },
+                "@controls": {
+                    "profile": {
+                        "href": "/profiles/error/"
+                    }
+                }
+            }
+            
+        
++ Response 415 (application/vnd.mason+json)
+
+    The client sent a request with the wrong content type or the request body was not valid JSON.
+
+    + Body
+        
+            {
+                "resource_url": "/api/reviews/1/",
+                "@error": {
+                    "@message": "Unsupported media type",
+                    "@messages": [
+                        "Use JSON"
+                    ]
+                },
+                "@controls": {
+                    "profile": {
+                        "href": "/profiles/error-profile/"
+                    }
+                }
+            }
+
+### Delete review [DELETE]
+
+Deletes the review.
+
++ Relation: delete
++ Request
+
+    + Headers
+        
+            Accept: application/vnd.mason+json
+        
++ Response 204
+
++ Response 404 (application/vnd.mason+json)
+
+    The client is trying to delete a review that doesn't exist. 
+
+    + Body
+    
+            {
+                "resource_url": "/api/reviews/9000/",
+                "@error": {
+                    "@message": "Review not found",
+                    "@messages": [null]
+                },
+                "@controls": {
+                    "profile": {
+                        "href": "/profiles/error/"
+                    }
+                }
+            }
+
+
+
+
+
+
+## User statistics [/api/users/{user}/reviews/stats/]
+
+This resource represents statistics for all reviews by a user.
+
++ Parameters
+
+    + user: 1 (integer) - user's unique id (id)
+
+
+### User statistics information [GET]
+
+Get the user statistics representation.
+
++ Relation: self
++ Request
+
+    + Headers
+    
+            Accept: application/vnd.mason+json
+        
++ Response 200 (application/vnd.mason+json)
+
+    + Body
+    
+            {
+                "@namespaces": {
+                    "mumeta": {
+                        "name": "/coffeemeta/link-relations#"
+                    }
+                },
+                "id": 1,
+                "number_of_reviews": 20,
+                "average_value": 8.5,
+                "@controls": {
+                    "author": {
+                        "href": "/api/users/1/"
+                    },
+                    "mumeta:reviews-by": {
+                        "href": "/api/users/1/reviews/"
+                    },
+                    "self": {
+                        "href": "/api/users/1/reviews/stats/"
+                    },
+                    "profile": {
+                        "href": "/profiles/userstatistics/"
+                    }
+                }
+            }
+
++ Response 404 (application/vnd.mason+json)
+
+    The client is trying to access statistics for a user that doesn't exist.
+
+    + Body
+    
+            {
+                "resource_url": "/api/users/7000/reviews/stats/",
+                "@error": {
+                    "@message": "User not found",
+                    "@messages": [null]
+                },
+                "@controls": {
+                    "profile": {
+                        "href": "/profiles/error/"
+                    }
+                }
+            }
+
+
+
+
+
+
+## Batch statistics [/api/batches/{batch}/reviews/stats/]
+
+This resource represents statistics for all reviews of a batch.
+
++ Parameters
+
+    + batch: 1 (integer) - batch's unique id (id)
+
+
+### Batch statistics information [GET]
+
+Get the batch statistics representation.
+
++ Relation: self
++ Request
+
+    + Headers
+    
+            Accept: application/vnd.mason+json
+        
++ Response 200 (application/vnd.mason+json)
+
+    + Body
+    
+            {
+                "@namespaces": {
+                    "mumeta": {
+                        "name": "/coffeemeta/link-relations#"
+                    }
+                },
+                "id": 1,
+                "number_of_reviews": 50,
+                "average_value": 9,
+                "@controls": {
+                    "mumeta:batch-of": {
+                        "href": "/api/batches/1/"
+                    },
+                    "mumeta:reviews-of": {
+                        "href": "/api/batches/1/reviews/"
+                    },
+                    "self": {
+                        "href": "/api/batches/1/reviews/stats/"
+                    },
+                    "profile": {
+                        "href": "/profiles/batchstatistics/"
+                    }
+                }
+            }
+
++ Response 404 (application/vnd.mason+json)
+
+    The client is trying to access statistics for a batch that doesn't exist.
+
+    + Body
+    
+            {
+                "resource_url": "/api/batches/8000/reviews/stats/",
+                "@error": {
+                    "@message": "Batch not found",
+                    "@messages": [null]
+                },
+                "@controls": {
+                    "profile": {
+                        "href": "/profiles/error/"
+                    }
+                }
+            }
+
+
+
+
+
+
+
+
+# Group Coffee
+
+All of these resources use the [Coffee Profile](reference/profiles/coffee-profile). In error scenarios [Error Profile](reference/profiles/error-profile) is used.
+
+## Coffee Collection [/api/coffees/]
+
+A list of all coffees known to the API.
+
+
+### List all coffees [GET]
+
+Get a list of all coffees known to the API.
+
++ Relation: coffees-all
++ Request
+
+    + Headers
+    
+            Accept: application/vnd.mason+json
+
++ Response 200 (application/vnd.mason+json)
+    
+    + Body
+
+            {
+                "@namespaces": {
+                    "mumeta": {
+                        "name": "/coffeemeta/link-relations#"
+                    }
+                },
+                "@controls": {
+                    "self": {
+                        "href": "/api/coffees/"
+                    },
+                    "mumeta:add-coffee": {
+                        "href": "/api/coffees/",
+                        "title": "Add a new type of coffee",
+                        "encoding": "json",
+                        "method": "POST",
+                        "schema": {
+                            "type": "object",
+                            "properties": {                    
+                                "id": {
+                                    "description": "id",
+                                    "type": "integer"
+                                },
+                                "name": {
+                                    "description": "name of the coffee",
+                                    "type": "string"
+                                }
+                            },
+                            "required": ["id", "name"]
+                        }
+                    }
+                },
+                "items": [
+                    {
+                        "id": 1,
+                        "name": "black",
+                        "@controls": {
+                            "self": {
+                                "href": "/api/coffees/1/"
+                            }, 
+                            "profile": {
+                                "href": "/profiles/coffee/"
+                            }
+                        }
+                    }, 
+                    {
+                        "id": 2,
+                        "name": "espresso",
+                        "@controls": {
+                            "self": {
+                                "href": "/api/coffees/2/"
+                            }, 
+                            "profile": {
+                                "href": "/profiles/coffee/"
+                            }
+                        }
+                    }
+                ]
+            }
+
+
+
+
+### Add Coffee type for coffee collection [POST]
+
+Adds a new coffee type to the coffee collection. The coffee representation must be valid against the coffee schema.
+
++ Relation: add-coffee
++ Request (application/json)
+
+    + Headers
+
+            Accept: application/vnd.mason+json
+        
+    + Body
+    
+            {
+                "id": 1,
+                "name": "black"
+            }
+
++ Response 201
+
+    + Headers
+    
+            Location: /api/coffees/1/
+
++ Response 400 (application/vnd.mason+json)
+
+    The client is trying to send a JSON document that doesn't validate against the schema.
+
+    + Body
+    
+            {
+                "resource_url": "/api/coffees/",
+                "@error": {
+                    "@message": "Invalid JSON document"
+                },
+                "@controls": {
+                    "profile": {
+                        "href": "/profiles/error/"
+                    }
+                }
+            }
+
++ Response 409 (application/vnd.mason+json)
+
+    The client is trying to add a coffee with an id or name that's already used by another coffee.
+
+    + Body
+    
+            {
+                "resource_url": "/api/coffees/",
+                "@error": {
+                    "@message": "Already exists",
+                    "@messages": [
+                        "There is already a coffee type with id '1' or name 'black' "
+                    ]
+                },
+                "@controls": {
+                    "profile": {
+                        "href": "/profiles/error/"
+                    }
+                }
+            }
+            
+
++ Response 415 (application/vnd.mason+json)
+
+    The client did not use the proper content type, or the request body was not valid JSON.
+
+    + Body
+        
+            {
+                "resource_url": "/api/coffees/",
+                "@error": {
+                    "@message": "Unsupported media type",
+                    "@messages": [
+                        "Use JSON"
+                    ]
+                },
+                "@controls": {
+                    "profile": {
+                        "href": "/profiles/error-profile/"
+                    }
+                }
+            }
+            
+            
+            
+        
+## Coffee [/api/coffees/{coffee}/]
+
+This resource represents a coffee type.
+
++ Parameters
+
+    + coffee: 1 (integer) - coffee's id
+
+
+### Coffee information [GET]
+
+Get the coffee's representation.
+
++ Relation: self
++ Request
+
+    + Headers
+    
+            Accept: application/vnd.mason+json
+        
++ Response 200 (application/vnd.mason+json)
+
+    + Body
+    
+            {
+                "@namespaces": {
+                    "mumeta": {
+                        "name": "/coffeemeta/link-relations#"
+                    }
+                },
+                "id": 1,
+                "name": "black",
+                "@controls": {
+                    "self": {
+                        "href": "/api/coffees/1/"
+                    },
+                    "profile": {
+                        "href": "/profiles/coffee/"
+                    },
+                    "collection": {
+                        "href": "/api/coffees/"
+                    },
+                    "edit": {
+                        "href": "/api/coffees/1/",
+                        "title": "Edit this coffee information",
+                        "encoding": "json",
+                        "method": "PUT",
+                        "schema": {
+                            "type": "object",
+                            "properties": {                    
+                                "id": {
+                                    "description": "id",
+                                    "type": "integer"
+                                },
+                                "name": {
+                                    "description": "name of coffee type",
+                                    "type": "string"
+                                }
+                            },
+                            "required": ["id", "name"]
+                        }
+                    }
+                }
+            }
+
++ Response 404 (application/vnd.mason+json)
+
+    The client is trying to access a coffee that doesn't exist.
+
+    + Body
+    
+            {
+                "resource_url": "/api/coffees/9000/",
+                "@error": {
+                    "@message": "Coffee not found",
+                    "@messages": [null]
+                },
+                "@controls": {
+                    "profile": {
+                        "href": "/profiles/error/"
+                    }
+                }
+            }
+
+
+
+            
+### Edit coffee information [PUT]
+
+Replace the coffee's representation with a new one. Missing optinal fields will be set to null. Must validate against the coffee schema. 
+
++ Relation: edit
++ Request (application/json)
+
+    + Headers
+        
+            Accept: application/vnd.mason+json
+        
+    + Body
+    
+            {
+                "id": 1,
+                "name": "black"
+            }
+        
++ Response 204
+
+
++ Response 400 (application/vnd.mason+json)
+
+    The client is trying to send a JSON document that doesn't validate against the schema.
+
+    + Body
+    
+            {
+                "resource_url": "/api/coffees/1/",
+                "@error": {
+                    "@message": "Invalid format",
+                    "@messages": [null]
+                },
+                "@controls": {
+                    "profile": {
+                        "href": "/profiles/error/"
+                    }
+                }
+            }
+
++ Response 404 (application/vnd.mason+json)
+
+    The client is trying to edit a coffee that doesn't exist. 
+
+    + Body
+    
+            {
+                "resource_url": "/api/coffees/9000/",
+                "@error": {
+                    "@message": "Coffee not found",
+                    "@messages": [null]
+                },
+                "@controls": {
+                    "profile": {
+                        "href": "/profiles/error/"
+                    }
+                }
+            }
+            
+        
++ Response 415 (application/vnd.mason+json)
+
+    The client sent a request with the wrong content type or the request body was not valid JSON.
+
+    + Body
+        
+            {
+                "resource_url": "/api/coffees/1/",
+                "@error": {
+                    "@message": "Unsupported media type",
+                    "@messages": [
+                        "Use JSON"
+                    ]
+                },
+                "@controls": {
+                    "profile": {
+                        "href": "/profiles/error-profile/"
+                    }
+                }
+            }
+
+
+
+
+
+
+
+
+# Group Location
+
+All of these resources use the [Location Profile](reference/profiles/location-profile). In error scenarios [Error Profile](reference/profiles/error-profile) is used.
+
+## locations Collection [/api/locations/]
+
+A list of all locations known to the API.
+
+
+### List all locations [GET]
+
+Get a list of all locations known to the API.
+
++ Relation: locations-all
++ Request
+
+    + Headers
+    
+            Accept: application/vnd.mason+json
+
++ Response 200 (application/vnd.mason+json)
+    
+    + Body
+
+            {
+                "@namespaces": {
+                    "mumeta": {
+                        "name": "/coffeemeta/link-relations#"
+                    }
+                },
+                "@controls": {
+                    "self": {
+                        "href": "/api/locations/"
+                    },
+                    "mumeta:add-location": {
+                        "href": "/api/locations/",
+                        "title": "Add a new location",
+                        "encoding": "json",
+                        "method": "POST",
+                        "schema": {
+                            "type": "object",
+                            "properties": {                    
+                                "id": {
+                                    "description": "id",
+                                    "type": "integer"
+                                },
+                                "name": {
+                                    "description": "name of the location",
+                                    "type": "string"
+                                }
+                            },
+                            "required": ["id", "name"]
+                        }
+                    }
+                },
+                "items": [
+                    {
+                        "id": 1,
+                        "name": "Oulu",
+                        "@controls": {
+                            "self": {
+                                "href": "/api/locations/1/"
+                            }, 
+                            "profile": {
+                                "href": "/profiles/location/"
+                            }
+                        }
+                    }, 
+                    {
+                        "id": 2,
+                        "name": "Helsinki",
+                        "@controls": {
+                            "self": {
+                                "href": "/api/locations/2/"
+                            }, 
+                            "profile": {
+                                "href": "/profiles/location/"
+                            }
+                        }
+                    }
+                ]
+            }
+
+
+
+
+### Add location type for location collection [POST]
+
+Adds a new location to the locations collection. The location representation must be valid against the location schema.
+
++ Relation: add-location
++ Request (application/json)
+
+    + Headers
+
+            Accept: application/vnd.mason+json
+        
+    + Body
+    
+            {
+                "id": 1,
+                "name": "Oulu"
+            }
+
++ Response 201
+
+    + Headers
+    
+            Location: /api/locations/1/
+
++ Response 400 (application/vnd.mason+json)
+
+    The client is trying to send a JSON document that doesn't validate against the schema.
+
+    + Body
+    
+            {
+                "resource_url": "/api/locations/",
+                "@error": {
+                    "@message": "Invalid JSON document"
+                },
+                "@controls": {
+                    "profile": {
+                        "href": "/profiles/error/"
+                    }
+                }
+            }
+
++ Response 409 (application/vnd.mason+json)
+
+    The client is trying to add a location with an id or name that's already used by another coffee.
+
+    + Body
+    
+            {
+                "resource_url": "/api/locations/",
+                "@error": {
+                    "@message": "Already exists",
+                    "@messages": [
+                        "There is already a location with id '1' or name 'black' "
+                    ]
+                },
+                "@controls": {
+                    "profile": {
+                        "href": "/profiles/error/"
+                    }
+                }
+            }
+            
+
++ Response 415 (application/vnd.mason+json)
+
+    The client did not use the proper content type, or the request body was not valid JSON.
+
+    + Body
+        
+            {
+                "resource_url": "/api/locations/",
+                "@error": {
+                    "@message": "Unsupported media type",
+                    "@messages": [
+                        "Use JSON"
+                    ]
+                },
+                "@controls": {
+                    "profile": {
+                        "href": "/profiles/error-profile/"
+                    }
+                }
+            }
+        
+## location [/api/locations/{location}/]
+
+This resource represents a location.
+
++ Parameters
+
+    + location: 1 (integer) - location's id
+
+
+### location information [GET]
+
+Get the location's representation.
+
++ Relation: self
++ Request
+
+    + Headers
+    
+            Accept: application/vnd.mason+json
+        
++ Response 200 (application/vnd.mason+json)
+
+    + Body
+    
+            {
+                "@namespaces": {
+                    "mumeta": {
+                        "name": "/coffeemeta/link-relations#"
+                    }
+                },
+                "id": 1,
+                "name": "Oulu",
+                "@controls": {
+                    "self": {
+                        "href": "/api/locations/1/"
+                    },
+                    "profile": {
+                        "href": "/profiles/location/"
+                    },
+                    "collection": {
+                        "href": "/api/locations/"
+                    },
+                    "edit": {
+                        "href": "/api/locations/1/",
+                        "title": "Edit this location information",
+                        "encoding": "json",
+                        "method": "PUT",
+                        "schema": {
+                            "type": "object",
+                            "properties": {                    
+                                "id": {
+                                    "description": "id",
+                                    "type": "integer"
+                                },
+                                "name": {
+                                    "description": "name of location",
+                                    "type": "string"
+                                }
+                            },
+                            "required": ["id", "name"]
+                        }
+                    }
+                }
+            }
+
++ Response 404 (application/vnd.mason+json)
+
+    The client is trying to access a location that doesn't exist.
+
+    + Body
+    
+            {
+                "resource_url": "/api/locations/9000/",
+                "@error": {
+                    "@message": "Location not found",
+                    "@messages": [null]
+                },
+                "@controls": {
+                    "profile": {
+                        "href": "/profiles/error/"
+                    }
+                }
+            }
+
+
+
+
+            
+### Edit location information [PUT]
+
+Replace the location's representation with a new one. Missing optinal fields will be set to null. Must validate against the location schema. 
+
++ Relation: edit
++ Request (application/json)
+
+    + Headers
+        
+            Accept: application/vnd.mason+json
+        
+    + Body
+    
+            {
+                "id": 1,
+                "name": "Oulu"
+            }
+        
++ Response 204
+
+
++ Response 400 (application/vnd.mason+json)
+
+    The client is trying to send a JSON document that doesn't validate against the schema.
+
+    + Body
+    
+            {
+                "resource_url": "/api/locations/1/",
+                "@error": {
+                    "@message": "Invalid format",
+                    "@messages": [null]
+                },
+                "@controls": {
+                    "profile": {
+                        "href": "/profiles/error/"
+                    }
+                }
+            }
+
++ Response 404 (application/vnd.mason+json)
+
+    The client is trying to edit a location that doesn't exist. 
+
+    + Body
+    
+            {
+                "resource_url": "/api/locations/9000/",
+                "@error": {
+                    "@message": "Location not found",
+                    "@messages": [null]
+                },
+                "@controls": {
+                    "profile": {
+                        "href": "/profiles/error/"
+                    }
+                }
+            }
+            
+        
++ Response 415 (application/vnd.mason+json)
+
+    The client sent a request with the wrong content type or the request body was not valid JSON.
+
+    + Body
+        
+            {
+                "resource_url": "/api/locations/1/",
+                "@error": {
+                    "@message": "Unsupported media type",
+                    "@messages": [
+                        "Use JSON"
+                    ]
+                },
+                "@controls": {
+                    "profile": {
+                        "href": "/profiles/error-profile/"
+                    }
+                }
+            }
+
