@@ -1,6 +1,5 @@
-# Guild Coffee; a brewer tracking api
+# A coffee tracking api, this app is made in REST APIs with python and flask, and a dummy browser client is made in python and javascript, it consists of users and each user can have batches and each batch have some reviews written by the users.
 
-This app is made in REST APIs with python and flask, and a dummy browser client is made in python and javascript, it consists of users and each user can have batches and each batch have some reviews written by the users.
 
 Api design:
 
