@@ -1,4 +1,4 @@
-# A coffee tracking api, this app server is made in REST APIs with python and flask, and a dummy browser client is made in python and javascript, it consists of users and each user can have batches and each batch have some reviews written by the users.
+# A coffee tracking api, this app server is made in REST APIs with python and flask, and a dummy browser client is made in python and javascript, it consists of users and each user can have batches and each batch can have some reviews written by the users.
 
 
 Api design:
